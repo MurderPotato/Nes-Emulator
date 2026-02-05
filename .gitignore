@@ -1,0 +1,6 @@
+# Nes Roms #
+*.nes
+*.ines
+# Compiled Files #
+*.o
+*.exe
