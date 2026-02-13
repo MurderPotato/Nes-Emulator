@@ -4,3 +4,6 @@
 # Compiled Files #
 *.o
 *.exe
+# etc #
+notes.txt
+/build

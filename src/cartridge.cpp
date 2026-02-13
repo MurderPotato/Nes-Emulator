@@ -19,13 +19,18 @@ Cartridge::Cartridge(std::string filename)
     // read PRG_ROM
     if (header[4] == 1)
     {
-        file.read((char*)PRG_ROM1, sizeof(PRG_ROM1));
+        file.read((char*)PRG_ROM, sizeof(PRG_ROM));
     }
     // read CHR_ROM
     if (header[5] == 1)
     {
         // TODO
     }
+}
+
+uint8_t Cartridge::read(uint16_t address)
+{
+    return 0;
 }
 
 // DEBUGGING #################################################

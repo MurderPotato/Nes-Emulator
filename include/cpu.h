@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cstdint>
-#include <array>
 
 #include "bus.h"
+#include "opcodes.h"
 
 class Cpu
 {
@@ -12,18 +12,25 @@ class Cpu
         Cpu(Bus &bus);
 
         // Member Functions
+        // fetches opcode and updates opcode variable and opcodeReady variable
+        void fetch_opcode();
+        // fetches 1 byte of address
+        void fetch_address();
+        // Executes the current instruction for one cycle
+        void execute_instruction();
+        // clocks the cpu for one cycle
         void clock_cpu();
         // clears opcode, addresss, and cycle variable to reset state
         void clear_state();
-
-
-    private:
+        
         // PROGRAM VARIABLES
-        // Latches
+        // Temporary Values
         uint8_t opcode;
+        bool opcodeReady;
         uint8_t value;
         uint16_t address;
         bool addressReady;
+        uint8_t immediateValue;
         // Cycle Counters
         int cyclesSincePower;
         int masterClock;
@@ -41,4 +48,8 @@ class Cpu
         uint8_t P;
         // System Bus
         Bus &bus;
+
+        private:
+        // Will move anything that should be private over later
+        // For now everything will be public for simplicity
 };
