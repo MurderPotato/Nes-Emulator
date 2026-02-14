@@ -168,11 +168,25 @@ namespace ops
     // Arithmetic
     void op_adc(Cpu& cpu)
     {
-
+        cpu.value = cpu.bus.read(cpu.address);
+        uint16_t result = cpu.A + cpu.value + (cpu.P & 0x01);
+        set_flag_carry(cpu, result > 0xFF);
+        set_flag_zero(cpu, result);
+        set_flag_overflow(cpu, ((result ^ cpu.A) & (result ^ cpu.value) & 0x80));
+        set_flag_negative(cpu, result);
+        cpu.A = (result % 256);
+        cpu.clear_state();
     }
     void op_sbc(Cpu& cpu)
     {
-
+        cpu.value = cpu.bus.read(cpu.address);
+        uint16_t result = cpu.A - cpu.value - (~cpu.P & 0x01);
+        set_flag_carry(cpu, result > 0xFF);
+        set_flag_zero(cpu, result);
+        set_flag_overflow(cpu, ((result ^ cpu.A) & (result ^ ~cpu.value) & 0x80));
+        set_flag_negative(cpu, result);
+        cpu.A = (result % 256);
+        cpu.clear_state();
     }
     void op_inc(Cpu& cpu)
     {
@@ -439,35 +453,58 @@ namespace ops
     // Stack
     void op_pha(Cpu& cpu)
     {
-        switch(cpu.localClock)
-        {
-            case 0:
-            
-                break;
-            case 1:
-
-                break;
-        }
+        cpu.bus.write(0x0100 + cpu.SP, cpu.A);
+        cpu.SP--;
+        cpu.clear_state();
     }
     void op_pla(Cpu& cpu)
     {
-
+        switch(cpu.localClock)
+        {
+            case 0:
+                cpu.SP++;
+                break;
+            case 1:
+                cpu.A = cpu.bus.read(0x0100 + cpu.SP);
+                set_flag_zero(cpu, cpu.A);
+                set_flag_negative(cpu, cpu.A);
+                cpu.clear_state();
+                break;
+        }
     }
     void op_php(Cpu& cpu)
     {
-
+        cpu.bus.write(0x0100 + cpu.SP, cpu.P | 0b00110000);
+        cpu.SP--;
     }
     void op_plp(Cpu& cpu)
     {
-
+        switch(cpu.localClock)
+        {
+            case 0:
+                cpu.SP++;
+                break;
+            case 1:
+                cpu.P |= (cpu.bus.read(0x0100 + cpu.SP) & 0b11001111);
+                set_flag_zero(cpu, cpu.A);
+                set_flag_negative(cpu, cpu.A);
+                cpu.clear_state();
+                break;
+        }
     }
     void op_txs(Cpu& cpu)
     {
-
+        cpu.SP = cpu.X;
+        set_flag_zero(cpu, cpu.SP);
+        set_flag_negative(cpu, cpu.SP);
+        cpu.clear_state();
     }
     void op_tsx(Cpu& cpu)
     {
-
+        cpu.X = cpu.SP;
+        set_flag_zero(cpu, cpu.X);
+        set_flag_negative(cpu, cpu.X);
+        cpu.clear_state();
     }
     // Flags
     void op_clc(Cpu& cpu)
