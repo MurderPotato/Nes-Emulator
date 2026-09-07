@@ -6,7 +6,7 @@
 int main() 
 {
     // Initialize SDL library
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
     // Create main emulator object
     Emulator* emu = new Emulator();

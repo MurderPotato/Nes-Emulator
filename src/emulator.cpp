@@ -9,6 +9,7 @@ Emulator::Emulator():
     renderer(title, 256, 240, 2),
     cpu(bus),
     ppu(bus, renderer),
+    apu(),
     debug(bus)
 {
     bus.set_cpu(&cpu);
@@ -58,6 +59,7 @@ void Emulator::step()
     }
     */
     poll_controller_input();
+    apu.clock_apu();
     // 3 PPU clocks per CPU clock
     ppu.clock_ppu();
     ppu.clock_ppu();

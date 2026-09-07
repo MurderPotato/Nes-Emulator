@@ -15,6 +15,7 @@ include_directories(${CMAKE_SOURCE_DIR}/vendored/SDL/include/SDL3)
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 
 add_executable(NesEmulator
+    src/apu.cpp
     src/bus.cpp
     src/cartridge.cpp
     src/cpu.cpp

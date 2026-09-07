@@ -5,6 +5,7 @@
 #include "renderer.h"
 #include "cpu.h"
 #include "ppu.h"
+#include "apu.h"
 #include "debug.h"
 
 inline const char* title = "Nes Emulator";
@@ -46,5 +47,6 @@ class Emulator
     Renderer renderer;
     Cpu cpu;
     Ppu ppu;
+    Apu apu;
     Debug debug;
 };
